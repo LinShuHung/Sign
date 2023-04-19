@@ -21,7 +21,7 @@
             />
 
     </LinearLayout>
-    <View
+    <com.suhun.sign.SignView
         android:id="@+id/sign"
         android:layout_width="0dp"
         android:layout_weight="7"
