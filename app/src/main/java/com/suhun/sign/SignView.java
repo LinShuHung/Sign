@@ -17,6 +17,7 @@ import java.util.LinkedList;
 public class SignView extends View {
     public String tag = SignView.class.getSimpleName();
     private LinkedList<LinkedList<HashMap<String, Float>>> lines = new LinkedList<>();
+    private LinkedList<LinkedList<HashMap<String, Float>>> recycler = new LinkedList<>();
     public SignView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
@@ -49,10 +50,30 @@ public class SignView extends View {
             line = new LinkedList<>();
             line.add(point);
             lines.add(line);
+            recycler.clear();//When draw new line,clean recycler
         }else if(event.getAction() == MotionEvent.ACTION_MOVE){//user touch and move in last line
             lines.getLast().add(point);
         }
         invalidate(); //reload view for onDraw
         return true;
+    }
+
+    public void clearCanvas(){
+        lines.clear();
+        invalidate();
+    }
+
+    public void undo(){
+        if(lines.size()>0){
+            recycler.add(lines.removeLast());
+            invalidate();
+        }
+    }
+
+    public void redo(){
+        if(recycler.size()>0){
+            lines.add(recycler.removeLast());
+            invalidate();
+        }
     }
 }
